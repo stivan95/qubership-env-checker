@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 ARG NB_USER="jovyan"
 ARG NB_UID="1000"
@@ -264,13 +264,13 @@ WORKDIR "${HOME}"
 #    jupyter labextension disable --level=system "@jupyterlab/apputils-extension:announcements"
 
 # Download and install kubectl
-RUN wget --progress=dot:giga -O kubectl-v1.32 https://dl.k8s.io/v1.32.0/bin/linux/amd64/kubectl && \
-    chmod +x ./kubectl-v1.32 && \
-    mv ./kubectl-v1.32 /usr/local/bin/ && \
-    ln -s /usr/local/bin/kubectl-v1.32 /usr/local/bin/kubectl
+RUN KUBECTL_VERSION="$(curl -Ls https://dl.k8s.io/release/latest.txt)"; \
+    wget --progress=dot:giga -O /usr/local/bin/kubectl-${KUBECTL_VERSION} https://dl.k8s.io/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+    chmod +x /usr/local/bin/kubectl-${KUBECTL_VERSION} && \
+    ln -sf /usr/local/bin/kubectl-${KUBECTL_VERSION} /usr/local/bin/kubectl
 
 # Download and install yq
-RUN wget --progress=dot:giga https://github.com/mikefarah/yq/releases/download/v4.45.4/yq_linux_amd64.tar.gz && \
+RUN wget --progress=dot:giga https://github.com/mikefarah/yq/releases/download/v4.47.1/yq_linux_amd64.tar.gz && \
     tar -xzvf yq_linux_amd64.tar.gz -C /usr/bin/ && \
     mv /usr/bin/yq_linux_amd64 /usr/bin/yq && \
     chmod +x /usr/bin/yq && \
