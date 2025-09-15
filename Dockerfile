@@ -224,6 +224,8 @@ ENV JUPYTER_PORT=8888
 EXPOSE $JUPYTER_PORT
 
 # Copy local files as late as possible to avoid cache busting
+COPY installation/shells/start.sh /usr/local/bin/
+# Copy local files as late as possible to avoid cache busting
 COPY installation/shells/start-notebook.sh installation/shells/start-singleuser.sh /usr/local/bin/
 # Copy scripts and their dependencies
 COPY --chown="${NB_UID}:${NB_GID}" "/${NB_USER}/" "/home/${NB_USER}/"
